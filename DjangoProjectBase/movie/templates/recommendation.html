@@ -1,31 +1,31 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Recomendación de Películas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="container mt-5">
-    <h2 class="mb-4">Buscador por Similitud Semántica</h2>
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">🤖 Buscador Inteligente de Películas</h2>
     
-    <form method="GET" action="{% url 'recommendation' %}" class="mb-4">
-        <div class="input-group">
-            <input type="text" name="searchMovie" class="form-control" placeholder="Ej: película de la segunda guerra mundial" value="{{ search_term|default:'' }}" required>
-            <button type="submit" class="btn btn-primary">Recomendar</button>
+    <form action="{% url 'recommendation' %}" method="GET">
+        <div class="mb-3">
+            <label for="searchMovie" class="form-label">Ingresa tu prompt (Ej: Película de la segunda guerra mundial)</label>
+            <div class="input-group">
+                <input type="text" class="form-control" name="searchMovie" placeholder="¿Qué tipo de historia buscas?" value="{{ search_term|default:'' }}" required>
+                <button type="submit" class="btn btn-primary">Recomendar</button>
+            </div>
         </div>
     </form>
 
     {% if best_movie %}
-        <div class="card" style="width: 18rem;">
-            <img src="{{ best_movie.image.url }}" class="card-img-top" alt="{{ best_movie.title }}">
-            <div class="card-body">
-                <h5 class="card-title">{{ best_movie.title }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Similitud: {{ max_similarity|floatformat:4 }}</h6>
-                <p class="card-text">{{ best_movie.description }}</p>
-            </div>
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <img src="{{ best_movie.image.url }}" class="img-fluid rounded shadow" alt="{{ best_movie.title }}">
         </div>
+        <div class="col-md-8">
+            <h3>{{ best_movie.title }}</h3>
+            <h5 class="text-success mb-3">Similitud: {{ max_similarity|floatformat:4 }}</h5>
+            <p class="fs-5">{{ best_movie.description }}</p>
+        </div>
+    </div>
     {% elif search_term %}
-        <div class="alert alert-warning">No se encontraron similitudes destacadas.</div>
+    <div class="alert alert-warning mt-4">No se encontró una recomendación adecuada en la base de datos.</div>
     {% endif %}
-</body>
-</html>
+</div>
+{% endblock content %}

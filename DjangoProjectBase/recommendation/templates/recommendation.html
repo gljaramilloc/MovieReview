@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">🤖 Buscador Inteligente de Películas</h2>
+    
+    <form action="">
+        <div class="mb-3">
+            <label for="searchMovie" class="form-label">Ingresa tu prompt (Ej: Película de la segunda guerra mundial)</label>
+            <div class="input-group">
+                <input type="text" class="form-control" name="searchMovie" placeholder="¿Qué tipo de historia buscas?" value="{{ search_term|default:'' }}" required>
+                <button type="submit" class="btn btn-primary">Buscador</button>
+            </div>
+        </div>
+    </form>
+
+    {% if best_movie %}
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <img src="{{ best_movie.image.url }}" class="img-fluid rounded shadow" alt="{{ best_movie.title }}">
+        </div>
+        <div class="col-md-8">
+            <h3>{{ best_movie.title }}</h3>
+            <h5 class="text-success mb-3">Similitud: {{ max_similarity|floatformat:4 }}</h5>
+            <p class="fs-5">{{ best_movie.description }}</p>
+        </div>
+    </div>
+    {% elif search_term %}
+    <div class="alert alert-warning mt-4">No se encontró una recomendación adecuada en la base de datos.</div>
+    {% endif %}
+</div>
+{% endblock content %}
